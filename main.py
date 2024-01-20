@@ -4,17 +4,17 @@ from fastapi.responses import HTMLResponse, RedirectResponse
 from pydantic import BaseModel, EmailStr
 from typing import Optional
 from urllib.parse import quote
-import smtplib
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
-import secrets
-import os
 from dotenv import load_dotenv
 from pymongo import MongoClient
+import requests
+
 
 app = FastAPI()
 
 
-@app.get("/blocktip")
-async def root():
-    return {"height": "826590"}
+@app.get("/getblocktip")
+async def getblocktip():
+    url = "https://mempool.space/api/blocks/tip/height"
+    response = requests.get(url)
+    response_json = response.json()
+    return {response_json}

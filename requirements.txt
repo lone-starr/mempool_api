@@ -1,8 +1,5 @@
 fastapi
 uvicorn
-python-multipart
 python-dotenv
 pymongo
-pydantic[dotenv]
-pydantic[email]
 requests

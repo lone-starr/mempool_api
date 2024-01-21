@@ -17,15 +17,16 @@ MONGO_URI = os.environ.get('MONGO_URI')
 async def getblocktip():
     bh_response = requests.get("https://mempool.space/api/blocks/tip/height")
     blockheight = bh_response.json()
-    count = 0
-    vsize = 0
+    mp_response = requests.get("https://mempool.space/api/mempool")
+    count = mp_response.json()["count"]
+    vsize = mp_response.json()["vsize"]
     data = {
         "height": blockheight,
         "count": count,
         "vsize": vsize,
         "ts": datetime.now()
     }
-    save_data(data)
+    save_data(data) 
     return {blockheight}
 
 

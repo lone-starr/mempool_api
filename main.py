@@ -13,6 +13,7 @@ app = FastAPI()
 
 MONGO_URI = os.environ.get('MONGO_URI')
 
+
 @app.get("/getblocktip")
 async def getblocktip():
     bh_response = requests.get("https://mempool.space/api/blocks/tip/height")
@@ -26,7 +27,7 @@ async def getblocktip():
         "vsize": vsize,
         "ts": datetime.now()
     }
-    save_data(data) 
+    save_data(data)
     return {blockheight}
 
 
@@ -36,7 +37,7 @@ def save_data(data):
     return data
 
 
-def get_db(db_name):
+def get_db(db_name: str):
     mongo_client = MongoClient(MONGO_URI)
     db = mongo_client['mempool']
     return db[db_name]

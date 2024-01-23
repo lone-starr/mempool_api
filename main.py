@@ -29,10 +29,16 @@ async def getblocktip():
     mp_response = requests.get("https://mempool.space/api/mempool")
     count = mp_response.json()["count"]
     vsize = mp_response.json()["vsize"]
+    hr_response = requests.get(
+        "https://mempool.space/api/v1/mining/hashrate/3d")
+    hashrate = hr_response.json()["currentHashrate"]
+    difficulty = hr_response.json()["currentDifficulty"]
     data = {
         "height": blockheight,
         "count": count,
         "vsize": vsize,
+        "hashrate": hashrate/1000000000000000000,
+        "diff": difficulty/1000000000000,
         "ts": datetime.now()
     }
 

@@ -33,12 +33,17 @@ async def getblocktip():
         "https://mempool.space/api/v1/mining/hashrate/3d")
     hashrate = hr_response.json()["currentHashrate"]
     difficulty = hr_response.json()["currentDifficulty"]
+    fee_response = requests.get(
+        "https://mempool.space/api/v1/fees/recommended")
+    minimumFee = fee_response.json()["minimumFee"]
+
     data = {
         "height": blockheight,
         "count": count,
         "vsize": vsize,
         "hashrate": hashrate/1000000000000000,
         "diff": difficulty/1000000000000,
+        "minimumFee": minimumFee,
         "ts": datetime.now()
     }
 

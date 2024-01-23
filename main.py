@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from fastapi import FastAPI, HTTPException, Response, status
+from fastapi import FastAPI, Depends, Header, HTTPException, Response, status
 from fastapi.responses import HTMLResponse, RedirectResponse
 from datetime import datetime
 from pymongo import MongoClient
@@ -12,9 +12,17 @@ load_dotenv(".env")
 app = FastAPI()
 
 MONGO_URI = os.environ.get('MONGO_URI')
+API_KEY = os.environ.get('API_KEY')
 
 
-@app.get("/getblocktip")
+def authenticate(api_key: str = Header(...)):
+    if api_key != API_KEY:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid API key")
+    return True
+
+
+@app.get("/getblocktip", dependencies=[Depends(authenticate)])
 async def getblocktip():
     bh_response = requests.get("https://mempool.space/api/blocks/tip/height")
     blockheight = bh_response.json()

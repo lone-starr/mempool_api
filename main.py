@@ -37,9 +37,9 @@ async def getblocktip():
     }
 
     mongo_client = MongoClient(MONGO_URI)
-    client = mongo_client['mempool']
-    db = client['blockheight']
-    db.insert_one(data)
+    db = mongo_client['mempool']
+    collection = db['blockheight']
+    collection.insert_one(data)
     mongo_client.close()
 
     return {blockheight}
@@ -50,15 +50,3 @@ async def getblocktip():
 #     db = get_db('blockheight')
 #     result = db.find({})
 #     return {result}
-
-
-# def save_data(data):
-#     db = get_db('blockheight')
-#     db.insert_one(data)
-#     return data
-
-
-# def get_db(db_name: str):
-#     mongo_client = MongoClient(MONGO_URI)
-#     db = mongo_client['mempool']
-#     return db[db_name]

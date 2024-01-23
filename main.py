@@ -35,17 +35,30 @@ async def getblocktip():
         "vsize": vsize,
         "ts": datetime.now()
     }
-    save_data(data)
+
+    mongo_client = MongoClient(MONGO_URI)
+    client = mongo_client['mempool']
+    db = client['blockheight']
+    db.insert_one(data)
+    mongo_client.close()
+
     return {blockheight}
 
 
-def save_data(data):
-    db = get_db('blockheight')
-    db.insert_one(data)
-    return data
+# @app.get("/getblocks")
+# async def getblocks():
+#     db = get_db('blockheight')
+#     result = db.find({})
+#     return {result}
 
 
-def get_db(db_name: str):
-    mongo_client = MongoClient(MONGO_URI)
-    db = mongo_client['mempool']
-    return db[db_name]
+# def save_data(data):
+#     db = get_db('blockheight')
+#     db.insert_one(data)
+#     return data
+
+
+# def get_db(db_name: str):
+#     mongo_client = MongoClient(MONGO_URI)
+#     db = mongo_client['mempool']
+#     return db[db_name]

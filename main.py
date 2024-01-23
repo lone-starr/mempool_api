@@ -37,7 +37,7 @@ async def getblocktip():
         "height": blockheight,
         "count": count,
         "vsize": vsize,
-        "hashrate": hashrate/1000000000000000000,
+        "hashrate": hashrate/1000000000000000,
         "diff": difficulty/1000000000000,
         "ts": datetime.now()
     }

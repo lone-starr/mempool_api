@@ -36,6 +36,7 @@ async def getblocktip():
     fee_response = requests.get(
         "https://mempool.space/api/v1/fees/recommended")
     minimumFee = fee_response.json()["minimumFee"]
+    fastestFee = fee_response.json()["fastestFee"]
 
     data = {
         "height": blockheight,
@@ -44,6 +45,7 @@ async def getblocktip():
         "hashrate": hashrate/1000000000000000,
         "diff": difficulty/1000000000000,
         "minimumFee": minimumFee,
+        "fastestFee": fastestFee,
         "ts": datetime.now()
     }
 

@@ -60,10 +60,3 @@ async def getblocktip():
     mongo_client.close()
 
     return {blockheight}
-
-
-# @app.get("/getblocks")
-# async def getblocks():
-#     db = get_db('blockheight')
-#     result = db.find({})
-#     return {result}

@@ -22,8 +22,8 @@ def authenticate(api_key: str = Header(...)):
     return True
 
 
-@app.get("/getblocktip", dependencies=[Depends(authenticate)])
-async def getblocktip():
+@app.get("/pulldata", dependencies=[Depends(authenticate)])
+async def pulldata():
     bh_response = requests.get("https://mempool.space/api/blocks/tip/height")
     blockheight = bh_response.json()
     mp_response = requests.get("https://mempool.space/api/mempool")

@@ -52,6 +52,7 @@ async def pulldata():
         "fastestFee": fastestFee,
         "hourFee": hourFee,
         "halfHourFee": halfHourFee,
+        "austinTemp": pullweatherdata(),
         "ts": datetime.now()
     }
 
@@ -64,12 +65,15 @@ async def pulldata():
     return {blockheight}
 
 
-@app.get("/pullweatherdata")
-async def pullweatherdata():
+def pullweatherdata():
+    # coordinates for Austin, TX
     lat = 30.266
     long = -97.733
-    w_response = requests.get(
-        f"https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={long}&appid={OWM_API_KEY}")
-    # temp = w_response.json()["weather"]
+    try:
+        w_response = requests.get(
+            f"https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={long}&units=imperial&appid={OWM_API_KEY}")
+        temp = w_response.json()["main"]["temp"]
+    except:
+        temp = None
 
-    return w_response.json()
+    return temp

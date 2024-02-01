@@ -14,6 +14,7 @@ app = FastAPI()
 
 MONGO_URI = os.environ.get('MONGO_URI')
 API_KEY = os.environ.get('API_KEY')
+OWM_API_KEY = os.environ.get('OWM_API_KEY')
 
 
 def authenticate(api_key: str = Header(...)):
@@ -61,3 +62,14 @@ async def pulldata():
     mongo_client.close()
 
     return {blockheight}
+
+
+@app.get("/pullweatherdata")
+async def pullweatherdata():
+    lat = 30.266
+    long = -97.733
+    w_response = requests.get(
+        f"https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={long}&appid={OWM_API_KEY}")
+    # temp = w_response.json()["weather"]
+
+    return w_response.json()

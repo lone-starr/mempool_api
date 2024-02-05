@@ -53,6 +53,7 @@ async def pulldata():
         "hourFee": hourFee,
         "halfHourFee": halfHourFee,
         "austinTemp": pullweatherdata(),
+        "price": pullprice(),
         "ts": datetime.now()
     }
 
@@ -77,3 +78,11 @@ def pullweatherdata():
         temp = None
 
     return temp
+
+
+def pullprice():
+    try:
+        response = requests.get("https://mempool.space/api/v1/prices")
+        return response.json()["USD"]
+    except:
+        return None

@@ -42,6 +42,16 @@ async def pulldata():
     hourFee = fee_response.json()["hourFee"]
     halfHourFee = fee_response.json()["halfHourFee"]
 
+    try:
+        p_response = requests.get("https://mempool.space/api/v1/prices")
+        priceUSD = p_response.json()["USD"]
+        priceEUR = p_response.json()["EUR"]
+        priceGBP = p_response.json()["GBP"]
+        priceCAD = p_response.json()["CAD"]
+        priceJPY = p_response.json()["JPY"]
+    except:
+        priceUSD, priceEUR, priceGBP,  priceCAD, priceJPY = None, None, None, None, None
+
     data = {
         "height": blockheight,
         "count": count,
@@ -53,7 +63,11 @@ async def pulldata():
         "hourFee": hourFee,
         "halfHourFee": halfHourFee,
         "austinTemp": pullweatherdata(),
-        "price": pullprice(),
+        "priceUSD": priceUSD,
+        "priceEUR": priceEUR,
+        "priceGBP": priceGBP,
+        "priceCAD": priceCAD,
+        "priceJPY": priceJPY,
         "ts": datetime.now()
     }
 
@@ -78,11 +92,3 @@ def pullweatherdata():
         temp = None
 
     return temp
-
-
-def pullprice():
-    try:
-        response = requests.get("https://mempool.space/api/v1/prices")
-        return response.json()["USD"]
-    except:
-        return None

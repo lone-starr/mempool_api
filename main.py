@@ -92,3 +92,15 @@ def pullweatherdata():
         temp = None
 
     return temp
+
+
+@app.get("/getsourcedata", dependencies=[Depends(authenticate)])
+def getsourcedata():
+    mongo_client = MongoClient(MONGO_URI)
+    db = mongo_client['mempool']
+    collection = db['blockheight']
+
+    result = collection.find(sort=[('ts', -1)])
+
+    mongo_client.close()
+    return result

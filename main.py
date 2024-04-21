@@ -26,21 +26,38 @@ def authenticate(api_key: str = Header(...)):
 
 @app.get("/pulldata", dependencies=[Depends(authenticate)])
 async def pulldata():
-    bh_response = requests.get("https://mempool.space/api/blocks/tip/height")
-    blockheight = bh_response.json()
-    mp_response = requests.get("https://mempool.space/api/mempool")
-    count = mp_response.json()["count"]
-    vsize = mp_response.json()["vsize"]
-    hr_response = requests.get(
-        "https://mempool.space/api/v1/mining/hashrate/3d")
-    hashrate = hr_response.json()["currentHashrate"]
-    difficulty = hr_response.json()["currentDifficulty"]
-    fee_response = requests.get(
-        "https://mempool.space/api/v1/fees/recommended")
-    minimumFee = fee_response.json()["minimumFee"]
-    fastestFee = fee_response.json()["fastestFee"]
-    hourFee = fee_response.json()["hourFee"]
-    halfHourFee = fee_response.json()["halfHourFee"]
+    try:
+        bh_response = requests.get(
+            "https://mempool.space/api/blocks/tip/height")
+        blockheight = bh_response.json()
+    except:
+        blockheight = None
+
+    try:
+        mp_response = requests.get("https://mempool.space/api/mempool")
+        count = mp_response.json()["count"]
+        vsize = mp_response.json()["vsize"]
+    except:
+        count, vsize = None, None
+
+    try:
+        hr_response = requests.get(
+            "https://mempool.space/api/v1/mining/hashrate/3d")
+
+        hashrate = int(hr_response.json()["currentHashrate"])
+        difficulty = float(hr_response.json()["currentDifficulty"])
+    except:
+        hashrate, difficulty = 0, 0
+
+    try:
+        fee_response = requests.get(
+            "https://mempool.space/api/v1/fees/recommended")
+        minimumFee = fee_response.json()["minimumFee"]
+        fastestFee = fee_response.json()["fastestFee"]
+        hourFee = fee_response.json()["hourFee"]
+        halfHourFee = fee_response.json()["halfHourFee"]
+    except:
+        minimumFee, fastestFee, hourFee, halfHourFee = None, None, None, None
 
     try:
         p_response = requests.get("https://mempool.space/api/v1/prices")
@@ -71,11 +88,14 @@ async def pulldata():
         "ts": datetime.now()
     }
 
-    mongo_client = MongoClient(MONGO_URI)
-    db = mongo_client['mempool']
-    collection = db['blockheight']
-    collection.insert_one(data)
-    mongo_client.close()
+    try:
+        mongo_client = MongoClient(MONGO_URI)
+        db = mongo_client['mempool']
+        collection = db['blockheight']
+        collection.insert_one(data)
+        mongo_client.close()
+    except:
+        return {"Error occured while inserting data into MongoDB"}
 
     return {blockheight}
 

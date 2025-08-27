@@ -20,7 +20,7 @@ Open VS Code from the mempool_api directory:
 ```bash
 code .
 ```
-In VS Code press < Ctrl >< Shift >< p >, type Python and choose 'Python: Select Interpretor', choose the newly created venv for mempool_dashboard
+In VS Code press < Ctrl >< Shift >< p >, type Python and choose 'Python: Select Interpretor', choose the newly created venv for mempool_api
 
 
 ## Install Dependencies

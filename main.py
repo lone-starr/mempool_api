@@ -28,13 +28,14 @@ def authenticate(api_key: str = Header(...)):
 async def pulldata():
     try:
         bh_response = requests.get(
-            "https://mempool.space/api/blocks/tip/height")
+            "https://mempool.space/api/blocks/tip/height", timeout=5)
         blockheight = bh_response.json()
     except:
         blockheight = None
 
     try:
-        mp_response = requests.get("https://mempool.space/api/mempool")
+        mp_response = requests.get(
+            "https://mempool.space/api/mempool", timeout=5)
         count = mp_response.json()["count"]
         vsize = mp_response.json()["vsize"]
     except:
@@ -42,7 +43,7 @@ async def pulldata():
 
     try:
         hr_response = requests.get(
-            "https://mempool.space/api/v1/mining/hashrate/3d")
+            "https://mempool.space/api/v1/mining/hashrate/3d", timeout=5)
 
         hashrate = int(hr_response.json()["currentHashrate"])
         difficulty = float(hr_response.json()["currentDifficulty"])
@@ -51,7 +52,7 @@ async def pulldata():
 
     try:
         fee_response = requests.get(
-            "https://mempool.space/api/v1/fees/recommended")
+            "https://mempool.space/api/v1/fees/recommended", timeout=5)
         minimumFee = fee_response.json()["minimumFee"]
         fastestFee = fee_response.json()["fastestFee"]
         hourFee = fee_response.json()["hourFee"]
@@ -60,7 +61,8 @@ async def pulldata():
         minimumFee, fastestFee, hourFee, halfHourFee = None, None, None, None
 
     try:
-        p_response = requests.get("https://mempool.space/api/v1/prices")
+        p_response = requests.get(
+            "https://mempool.space/api/v1/prices", timeout=5)
         priceUSD = p_response.json()["USD"]
         priceEUR = p_response.json()["EUR"]
         priceGBP = p_response.json()["GBP"]
@@ -106,7 +108,7 @@ def pullweatherdata():
     long = -97.733
     try:
         w_response = requests.get(
-            f"https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={long}&units=imperial&appid={OWM_API_KEY}")
+            f"https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={long}&units=imperial&appid={OWM_API_KEY}", timeout=5)
         temp = w_response.json()["main"]["temp"]
     except:
         temp = None

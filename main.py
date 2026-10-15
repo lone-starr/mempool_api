@@ -28,14 +28,15 @@ def authenticate(api_key: str = Header(...)):
 async def pulldata():
     try:
         bh_response = requests.get(
-            "https://mempool.space/api/blocks/tip/height", timeout=5)
+            "https://mempool.space/api/blocks/tip/height", timeout=(5.0, 10.0))
         blockheight = bh_response.json()
     except:
         blockheight = None
 
     try:
+        # timeout=(connect_timeout, read_timeout) in seconds
         mp_response = requests.get(
-            "https://mempool.space/api/mempool", timeout=5)
+            "https://mempool.space/api/mempool", timeout=(5.0, 10.0))
         count = mp_response.json()["count"]
         vsize = mp_response.json()["vsize"]
     except:
@@ -43,7 +44,7 @@ async def pulldata():
 
     try:
         hr_response = requests.get(
-            "https://mempool.space/api/v1/mining/hashrate/3d", timeout=5)
+            "https://mempool.space/api/v1/mining/hashrate/3d", timeout=(5.0, 10.0))
 
         hashrate = int(hr_response.json()["currentHashrate"])
         difficulty = float(hr_response.json()["currentDifficulty"])
@@ -52,7 +53,7 @@ async def pulldata():
 
     try:
         fee_response = requests.get(
-            "https://mempool.space/api/v1/fees/recommended", timeout=5)
+            "https://mempool.space/api/v1/fees/recommended", timeout=(5.0, 10.0))
         minimumFee = fee_response.json()["minimumFee"]
         fastestFee = fee_response.json()["fastestFee"]
         hourFee = fee_response.json()["hourFee"]
@@ -62,7 +63,7 @@ async def pulldata():
 
     try:
         p_response = requests.get(
-            "https://mempool.space/api/v1/prices", timeout=5)
+            "https://mempool.space/api/v1/prices", timeout=(5.0, 10.0))
         priceUSD = p_response.json()["USD"]
         priceEUR = p_response.json()["EUR"]
         priceGBP = p_response.json()["GBP"]

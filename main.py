@@ -109,7 +109,7 @@ def pullweatherdata():
     long = -97.733
     try:
         w_response = requests.get(
-            f"https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={long}&units=imperial&appid={OWM_API_KEY}", timeout=5)
+            f"https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={long}&units=imperial&appid={OWM_API_KEY}", timeout=(5.0, 10.0))
         temp = w_response.json()["main"]["temp"]
     except:
         temp = None
